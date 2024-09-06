@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "播放器增强",
+  "version": "1.0.3",
+  "description": "为网页播放器添加自定义功能菜单",
+  "author": "王导导",
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/content.js"],
+      "css": ["content/styles.css"]
+    }
+  ]
+}
