@@ -4,6 +4,7 @@
   "version": "1.0.3",
   "description": "为网页播放器添加自定义功能菜单",
   "author": "王导导",
+  "time": "2021.12.2015",
   "permissions": [
     "activeTab",
     "contextMenus",
