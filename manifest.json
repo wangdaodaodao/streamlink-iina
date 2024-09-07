@@ -27,8 +27,15 @@
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "js": ["content/content.js"],
-            "css": ["content/styles.css"]
+            "js": ["content/content.js"]
+        },
+        {
+            "matches": ["*://*.bilibili.com/*"],
+            "js": ["content/bilibili.js"]
+        },
+        {
+            "matches": ["*://*.youtube.com/*"],
+            "js": ["content/youtube.js"]
         }
     ]
 }
