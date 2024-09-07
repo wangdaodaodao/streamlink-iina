@@ -4,6 +4,73 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     bilibiliHandler().then(result => {
       if (result && result.url) {
         openInIINA(result.url);
+      } else {
+        alert('无法获取 Bilibili 视频地址');
+      }
+    }).catch(() => {
+      alert('无法获取 Bilibili 视频地址');
+    });
+  }
+});
+
+// Bilibili视频处理主函数
+async function bilibiliHandler() {
+  const videoInfo = await getVideoInfo();
+  if (videoInfo && videoInfo.bvid) {
+    const playUrl = `https://www.bilibili.com/video/${videoInfo.bvid}`;
+    return { url: playUrl };
+  }
+  return null;
+}
+
+// 获取视频信息
+async function getVideoInfo() {
+  const initialState = window.__INITIAL_STATE__;
+  if (initialState && initialState.bvid) {
+    return { bvid: initialState.bvid };
+  }
+
+  const bvid = getVideoId();
+  if (bvid) {
+    return { bvid: bvid };
+  }
+
+  return null;
+}
+
+// 从URL获取视频ID
+function getVideoId() {
+  const match = window.location.pathname.match(/\/video\/(BV[\w]+)/);
+  return match ? match[1] : null;
+}
+
+// 在 IINA 中打开指定的 URL
+function openInIINA(url) {
+  const encodedUrl = encodeURIComponent(url);
+  const iinaUrl = `iina://open?url=${encodedUrl}`;
+  window.location.href = iinaUrl;
+}
+
+// 为项目结构适配的 getVideoUrl 函数
+window.getVideoUrl = async function() {
+  const result = await bilibiliHandler();
+  if (result && result.url) {
+    return result.url;
+  }
+  throw new Error('无法获取 Bilibili 视频地址');
+};
+
+// 以下是备用代码，可以获取b站 .MP4格式视频 URL的方法
+//  可以直接 使用   
+//editby 王导导 2024.9.7 11.08.43 
+
+
+/*
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "openInIINA") {
+    bilibiliHandler().then(result => {
+      if (result && result.url) {
+        openInIINA(result.url);
       }
       // 移除了所有可能的错误提示
     });
@@ -125,3 +192,5 @@ window.getVideoUrl = async function() {
   }
   throw new Error('无法获取 Bilibili 视频地址');
 };
+
+*/
