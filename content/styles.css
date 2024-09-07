@@ -1,23 +1,26 @@
+/* 浮动菜单的基本样式 */
 .floating-menu {
-  position: fixed;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 5px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  z-index: 9999;
+  position: fixed;  /* 固定位置 */
+  background-color: white;  /* 白色背景 */
+  border: 1px solid #ccc;  /* 灰色边框 */
+  padding: 5px;  /* 内边距 */
+  border-radius: 5px;  /* 圆角 */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);  /* 阴影效果 */
+  z-index: 9999;  /* 确保菜单显示在其他元素之上 */
 }
 
+/* 浮动菜单中按钮的样式 */
 .floating-menu button {
-  display: block;
-  width: 100%;
-  padding: 5px 10px;
-  margin: 2px 0;
-  border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
+  display: block;  /* 块级显示 */
+  width: 100%;  /* 宽度占满父元素 */
+  padding: 5px 10px;  /* 内边距 */
+  margin: 2px 0;  /* 上下外边距 */
+  border: none;  /* 无边框 */
+  background-color: #f0f0f0;  /* 浅灰色背景 */
+  cursor: pointer;  /* 鼠标悬停时显示手型光标 */
 }
 
+/* 按钮悬停效果 */
 .floating-menu button:hover {
-  background-color: #e0e0e0;
+  background-color: #e0e0e0;  /* 鼠标悬停时背景色变深 */
 }

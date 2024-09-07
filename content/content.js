@@ -1,87 +1,39 @@
-let floatingMenu = null;
+console.log("Content script starting...");
 
-function createFloatingMenu() {
-  if (floatingMenu) {
-    document.body.removeChild(floatingMenu);
-  }
-  floatingMenu = document.createElement('div');
-  floatingMenu.className = 'floating-menu';
-  floatingMenu.innerHTML = `
-    <button id="copy-and-open-m3u8">在IINA中打开</button>
-  `;
-  document.body.appendChild(floatingMenu);
-  return floatingMenu;
-}
-
-function positionMenu(menu, x, y) {
-  menu.style.left = `${x}px`;
-  menu.style.top = `${y}px`;
-}
-
-function hideMenu() {
-  if (floatingMenu) {
-    floatingMenu.style.display = 'none';
-  }
-}
-
-function copyToClipboard(text) {
-  return navigator.clipboard.writeText(text);
-}
-
+/**
+ * 在 IINA 中打开指定的 URL
+ * @param {string} url - 要在 IINA 中打开的 URL
+ */
 function openInIINA(url) {
+  // 对 URL 进行编码，确保特殊字符被正确处理
   const encodedUrl = encodeURIComponent(url);
+  // 构造 IINA 的自定义 URL scheme
   const iinaUrl = `iina://open?url=${encodedUrl}`;
+  // 尝试打开 IINA
   window.location.href = iinaUrl;
 }
 
+/**
+ * 处理捕获到的 m3u8 URL
+ * @param {string[]} m3u8Urls - 捕获到的 m3u8 URL 数组
+ */
 function handleM3U8Action(m3u8Urls) {
-  if (m3u8Urls.length > 0) {
+  if (m3u8Urls && m3u8Urls.length > 0) {
+    // 如果有捕获到的 URL，使用最后一个（最新的）URL
     const latestM3U8 = m3u8Urls[m3u8Urls.length - 1];
-    copyToClipboard(latestM3U8)
-      .then(() => {
-        console.log('m3u8地址已复制到剪贴板');
-        openInIINA(latestM3U8);
-      })
-      .catch((err) => {
-        console.error('无法复制到剪贴板: ', err);
-        openInIINA(latestM3U8);
-      });
+    openInIINA(latestM3U8);
   } else {
-    console.log('未找到m3u8地址');
+    // 如果没有捕获到 URL，显示错误消息
+    alert('无法获取视频地址');
   }
 }
 
-function handleVideoContextMenu(e) {
-  e.preventDefault();
-  const menu = createFloatingMenu();
-  positionMenu(menu, e.clientX, e.clientY);
-  menu.style.display = 'block';
-
-  document.getElementById('copy-and-open-m3u8').addEventListener('click', () => {
-    chrome.runtime.sendMessage({action: "getM3U8Urls"}, function(response) {
-      handleM3U8Action(response.m3u8Urls);
-    });
-    hideMenu();
-  });
-
-  document.addEventListener('click', hideMenu, { once: true });
-}
-
-function initializeVideoContextMenu() {
-  const videos = document.querySelectorAll('video');
-  videos.forEach(video => {
-    video.addEventListener('contextmenu', handleVideoContextMenu);
-  });
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeVideoContextMenu);
-} else {
-  initializeVideoContextMenu();
-}
-
+// 监听来自背景脚本的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "copyAndOpenM3U8") {
+  // 检查消息是否是打开 IINA 的动作
+  if (request.action === "openInIINA") {
+    // 处理捕获到的 m3u8 URL
     handleM3U8Action(request.m3u8Urls);
   }
 });
+
