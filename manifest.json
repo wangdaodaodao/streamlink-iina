@@ -10,8 +10,8 @@
     "manifest_version": 3,
     "version": "1.0.4",
     "icons": {
-        "24": "icons-24.png",
-        "48": "icons-48.png"
+        "24": "content/icons-24.png",
+        "48": "content/icons-48.png"
     },
     "permissions": [
         "activeTab",
