@@ -28,14 +28,6 @@
         {
             "matches": ["<all_urls>"],
             "js": ["content/content.js"]
-        },
-        {
-            "matches": ["*://*.bilibili.com/*"],
-            "js": ["content/bilibili.js"]
-        },
-        {
-            "matches": ["*://*.youtube.com/*"],
-            "js": ["content/youtube.js"]
         }
     ]
 }
